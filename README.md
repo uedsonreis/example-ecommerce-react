@@ -1,2 +1,2 @@
 # example-ecommerce-react
-App built in React for classes.
+App built in React-Native for classes.
