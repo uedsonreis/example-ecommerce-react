@@ -7,6 +7,12 @@ type State = { product: Product };
 
 export class PickupScreen extends Component<any, State> {
 
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerTitle: () => <Text>{navigation.state.params.name}</Text>,
+        };
+    };
+
     constructor(props: any) {
         super(props);
 

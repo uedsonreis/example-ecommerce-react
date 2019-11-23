@@ -22,7 +22,7 @@ class CatalogFactory extends Factory {
         );
 
         stack.navigationOptions = {
-            tabBarLabel: 'Catalog',
+            tabBarLabel: 'Catálogo',
             tabBarIcon: ({ focused }) => {
                 const name: string = Platform.OS === 'ios' ? 'ios-list' : 'md-list';
                 return <TabBarIcon name={name} focused={focused} />;
