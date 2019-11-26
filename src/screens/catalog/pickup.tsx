@@ -4,6 +4,7 @@ import { Text, Content, Label, ListItem, Button, List, Form, Card } from 'native
 import cart from '../../model/cart';
 import { Product } from '../../model/product';
 import { Item } from '../../model/item';
+import styles from './styles';
 
 type State = { product: Product };
 
@@ -40,17 +41,17 @@ export class PickupScreen extends Component<any, State> {
 
                 <List>
                     <ListItem>
-                        <Label><Text> Fabricante: {this.state.product.factory.name} </Text></Label>
+                        <Label><Text> Fabricado por {this.state.product.factory.name}. </Text></Label>
                     </ListItem>
                     <ListItem>
-                        <Label><Text> Nós temos {this.state.product.amount} unidades em estoque. </Text></Label>
+                        <Label><Text> Temos {this.state.product.amount} unidades em estoque. </Text></Label>
                     </ListItem>
                     <ListItem last>
                         <Label><Text> Valor unitário: R$ {this.state.product.price.toFixed(2)} </Text></Label>
                     </ListItem>
                 </List>
 
-                <Button onPress={() => this.addToCart()} block transparent>
+                <Button onPress={() => this.addToCart()} style={styles.addButton} block>
                     <Text>Add 1 unidade no Carrinho</Text>
                 </Button>
             
