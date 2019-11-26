@@ -2,16 +2,19 @@ import React, { Component, ReactNode } from 'react';
 import { Right, Body, Text, List, ListItem, Content } from 'native-base';
 
 import api from '../../utils/connection.api';
-
 import { Product } from '../../model/product';
+import { MenuIcon } from '../../components/sidemenu/menu.icon';
 
 type State = { products: Product[] };
 
 export class CatalogScreen extends Component<any, State> {
 
-    static navigationOptions = () => {
+    static navigationOptions = ({ navigation }) => {
         return {
             headerTitle: () => <Text>Catálogo</Text>,
+            headerLeft: () => (
+                <MenuIcon navigation={navigation} />
+            ),
         };
     };
 

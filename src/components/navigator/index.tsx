@@ -1,7 +1,5 @@
 import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createStackNavigator } from 'react-navigation-stack';
-import { Platform } from 'react-native';
 
 import catalogStack from '../../screens/catalog';
 import salesOrderStack from '../../screens/sales-order';

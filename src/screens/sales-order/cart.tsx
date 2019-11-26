@@ -2,7 +2,9 @@ import React, { Component, ReactNode } from 'react';
 import { Body, Content, List, ListItem, Right, Text, Button } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
-import cart from '../../model/cart';
+import { MenuIcon } from '../../components/sidemenu/menu.icon';
+import api from '../../utils/connection.api';
+import cart from '../../storage/cart';
 import { Item } from '../../model/item';
 import { Platform } from 'react-native';
 import styles from './styles';
@@ -11,9 +13,12 @@ type State = { items: Item[] }
 
 export class CartScreen extends Component<any, State> {
 
-    static navigationOptions = () => {
+    static navigationOptions = ({ navigation }) => {
         return {
             headerTitle: () => <Text>Carrinho de Compras</Text>,
+            headerLeft: () => (
+                <MenuIcon navigation={navigation} />
+            )
         };
     };
 
@@ -44,14 +49,22 @@ export class CartScreen extends Component<any, State> {
     }
 
     private invoice(): void {
-        alert("to do the request to server.");
+        api.post('sales/order/invoice', this.state.items).then((result: any) => {
+            alert(JSON.stringify(result));
+        });
     }
 
     public render(): ReactNode {
+        let total: number = 0.0;
+
+        this.state.items.forEach((item: Item) => {
+            total += item.price * item.amount;
+        });
+
         return (
             <Content>
                 <List dataArray={this.state.items} renderRow={(item: Item) => 
-                    <ListItem noIndent onPress={() => this.props.navigation.navigate('Pickup', item) }>
+                    <ListItem>
                         <Body>
                             <Text>{item.product.factory.name} {item.product.name}</Text>
                             <Text note>{item.price.toFixed(2)} * {item.amount} un = R$ {(item.price * item.amount).toFixed(2)}</Text>
@@ -65,6 +78,9 @@ export class CartScreen extends Component<any, State> {
                         </Right>
                     </ListItem>
                 } />
+                <ListItem last>
+                    <Text>Total do Pedido: R$ {total.toFixed(2)}</Text>
+                </ListItem>
 
                 <Button onPress={() => this.invoice()} style={styles.invoiceButton} block>
                     <Text>Fechar o Pedido</Text>

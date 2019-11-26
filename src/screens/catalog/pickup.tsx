@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Text, Content, Label, ListItem, Button, List, Form, Card } from 'native-base';
 
-import cart from '../../model/cart';
+import cart from '../../storage/cart';
 import { Product } from '../../model/product';
 import { Item } from '../../model/item';
 import styles from './styles';

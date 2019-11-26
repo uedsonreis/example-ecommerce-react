@@ -1,25 +1,14 @@
-import { Item } from './item';
-import { Product } from './product';
-import { Platform } from 'react-native';
+import { Item } from '../model/item';
+import { Product } from '../model/product';
 
-declare var window;
+import storage from './local.storage';
 
 class Cart {
 
     private static readonly LOCAL_VAR: string = "CART";
 
-    private storage: any;
-
-    constructor() {
-        if (Platform.OS === 'web') {
-            this.storage = window.localStorage;
-        } else {
-            this.storage = require('@react-native-community/async-storage');
-        }
-    }
-
     public get(): Item[] {
-        const value: any = this.storage.getItem(Cart.LOCAL_VAR);
+        const value: any = storage.getItem(Cart.LOCAL_VAR);
 
         if (value === undefined || value === null) {
             return new Array<Item>();
@@ -49,14 +38,14 @@ class Cart {
             items.push(item);
         }
 
-        this.storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
+        storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
     }
 
     public remove(item: Item): void {
         const items: Item[] = this.get();
         const itemSaved: Item = this.getItem(items, item.product);
         this.removeItem(items, itemSaved);
-        this.storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
+        storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
     }
 
 }
