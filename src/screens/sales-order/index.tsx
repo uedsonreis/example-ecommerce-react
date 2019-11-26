@@ -22,7 +22,7 @@ class SalesOrderFactory extends Factory {
         );
 
         stack.navigationOptions = {
-            tabBarLabel: 'Catalog',
+            tabBarLabel: 'Carrinho',
             tabBarIcon: ({ focused }) => {
                 const name: string = Platform.OS === 'ios' ? 'ios-cart' : 'md-cart';
                 return <TabBarIcon name={name} focused={focused} />;

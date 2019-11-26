@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Right, Body, Text, View, List, ListItem, Button } from 'native-base';
+import { Right, Body, Text, List, ListItem, Content } from 'native-base';
 
 import api from '../../utils/connection.api';
 
@@ -32,8 +32,8 @@ export class CatalogScreen extends Component<any, State> {
 
     public render(): ReactNode {
         return (
-            <View>
-                <List dataArray={this.state.products} renderRow={(product) => 
+            <Content>
+                <List dataArray={this.state.products} renderRow={(product: Product) => 
                     <ListItem noIndent onPress={() => this.props.navigation.navigate('Pickup', product) }>
                         <Body>
                             <Text>{product.name}</Text>
@@ -44,7 +44,7 @@ export class CatalogScreen extends Component<any, State> {
                         </Right>
                     </ListItem>
                 } />
-            </View>
+            </Content>
         );
     }
 }
