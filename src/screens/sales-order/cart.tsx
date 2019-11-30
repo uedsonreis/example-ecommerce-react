@@ -1,13 +1,16 @@
 import React, { Component, ReactNode } from 'react';
+import { Platform } from 'react-native';
 import { Body, Content, List, ListItem, Right, Text, Button } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
 import { MenuIcon } from '../../components/sidemenu/menu.icon';
 import api from '../../utils/connection.api';
-import cart from '../../storage/cart';
+import HTTP from '../../utils/http.codes';
 import { Item } from '../../model/item';
-import { Platform } from 'react-native';
+import cart from '../../storage/cart';
 import styles from './styles';
+import { ApisauceInstance } from 'apisauce';
+import userSession from '../../storage/user.session';
 
 type State = { items: Item[] }
 
@@ -22,6 +25,8 @@ export class CartScreen extends Component<any, State> {
         };
     };
 
+    private api: ApisauceInstance;
+
     private focusListener: any;
 
     constructor(props: any) {
@@ -30,6 +35,7 @@ export class CartScreen extends Component<any, State> {
     }
 
     private updateItems(): void {
+        const token: string = userSession.logged();
         this.setState({ items: cart.get() });
     }
 
@@ -49,8 +55,15 @@ export class CartScreen extends Component<any, State> {
     }
 
     private invoice(): void {
+        api.setHeader("Authorization", "Bearer "+ userSession.logged());
+        console.log("api: ", api);
+
         api.post('sales/order/invoice', this.state.items).then((result: any) => {
-            alert(JSON.stringify(result));
+            if (result.status === HTTP.UNAUTHORIZED) {
+                this.props.navigation.navigate('Login');
+            } else {
+                // alert(result.status);
+            }
         });
     }
 
