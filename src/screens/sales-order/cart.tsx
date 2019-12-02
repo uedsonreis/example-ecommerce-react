@@ -4,7 +4,7 @@ import { Body, Content, List, ListItem, Right, Text, Button } from 'native-base'
 import { Ionicons } from '@expo/vector-icons';
 
 import { MenuIcon } from '../../components/sidemenu/menu.icon';
-import api from '../../utils/connection.api';
+import api, { Authorization } from '../../utils/connection.api';
 import HTTP from '../../utils/http.codes';
 import { Item } from '../../model/item';
 import cart from '../../storage/cart';
@@ -35,8 +35,8 @@ export class CartScreen extends Component<any, State> {
     }
 
     private updateItems(): void {
-        const token: string = userSession.logged();
-        this.setState({ items: cart.get() });
+        const items: Item[] = cart.get();
+        this.setState({ items: items });
     }
 
     componentDidMount(): void {
@@ -55,14 +55,17 @@ export class CartScreen extends Component<any, State> {
     }
 
     private invoice(): void {
-        api.setHeader("Authorization", "Bearer "+ userSession.logged());
-        console.log("api: ", api);
-
+        api.setHeader(Authorization, "Bearer "+ userSession.getToken());
+        
         api.post('sales/order/invoice', this.state.items).then((result: any) => {
-            if (result.status === HTTP.UNAUTHORIZED) {
+            if (result.status === HTTP.BAD_REQUEST) {
+                alert("You must login as a Customer to do the purchasing!");
+                this.props.navigation.navigate('Login');
+            } else if (result.status === HTTP.FORBIDDEN) {
+                alert("Validation failure, You are not logged!");
                 this.props.navigation.navigate('Login');
             } else {
-                // alert(result.status);
+                alert(result.status +": "+ result.data);
             }
         });
     }
