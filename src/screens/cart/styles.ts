@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
 
     invoiceButton: {
-        margin: '20px'
+        margin: 20
     },
 
     trashButton: {

@@ -1,6 +1,5 @@
 import React, { Component, ReactNode } from "react";
-import { TextInput } from "react-native";
-import { Content, List, ListItem, Button, Text, Label, Container, Segment } from "native-base";
+import { Content, List, ListItem, Button, Text, Label, Container, Segment, Input } from "native-base";
 import { NavigationActions } from "react-navigation";
 import { DrawerActions } from "react-navigation-drawer";
 
@@ -119,11 +118,11 @@ export class LoginScreen extends Component<any, State> {
                 <List>
                     <ListItem>
                         <Label><Text> Email: </Text></Label>
-                        <TextInput onChangeText={text => this.state.user.login = text} />
+                        <Input onChangeText={text => this.state.user.login = text} />
                     </ListItem>
                     <ListItem>
                         <Label><Text> Senha: </Text></Label>
-                        <TextInput secureTextEntry={true} onChangeText={text => this.state.user.password = text} />
+                        <Input secureTextEntry={true} onChangeText={text => this.state.user.password = text} />
                     </ListItem>
                 </List>
 
@@ -140,27 +139,27 @@ export class LoginScreen extends Component<any, State> {
                 <List>
                     <ListItem>
                         <Label><Text> Email: </Text></Label>
-                        <TextInput onChangeText={text => this.state.user.login = text} />
+                        <Input onChangeText={text => this.state.user.login = text} />
                     </ListItem>
                     <ListItem>
                         <Label><Text> Senha: </Text></Label>
-                        <TextInput secureTextEntry={true} onChangeText={text => this.state.user.password = text} />
+                        <Input secureTextEntry={true} onChangeText={text => this.state.user.password = text} />
                     </ListItem>
                     <ListItem>
                         <Label><Text> Confirmar Senha: </Text></Label>
-                        <TextInput secureTextEntry={true} onChangeText={text => this.setState({ confirmPass: text}) } />
+                        <Input secureTextEntry={true} onChangeText={text => this.setState({ confirmPass: text}) } />
                     </ListItem>
                     <ListItem>
                         <Label><Text> Nome: </Text></Label>
-                        <TextInput onChangeText={text => this.state.customer.name = text} />
+                        <Input onChangeText={text => this.state.customer.name = text} />
                     </ListItem>
                     <ListItem>
                         <Label><Text> Idade: </Text></Label>
-                        <TextInput keyboardType={'numeric'} onChangeText={age => this.state.customer.age = Number(age)} />
+                        <Input keyboardType={'numeric'} onChangeText={age => this.state.customer.age = Number(age)} />
                     </ListItem>
                     <ListItem>
                         <Label><Text> Endereço: </Text></Label>
-                        <TextInput onChangeText={text => this.state.customer.address = text} />
+                        <Input onChangeText={text => this.state.customer.address = text} />
                     </ListItem>
                 </List>
 

@@ -1,5 +1,5 @@
 import { Customer } from "./customer";
-import { Item } from "native-base";
+import { Item } from "./item";
 
 export class SalesOrder {
 

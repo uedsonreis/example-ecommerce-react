@@ -13,7 +13,6 @@ class LoginFactory extends Factory {
             { LoginScreen },
             this.config
         );
-        stack.path = "";
         return stack;
     }
 }

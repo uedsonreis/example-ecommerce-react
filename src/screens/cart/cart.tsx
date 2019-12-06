@@ -9,10 +9,9 @@ import HTTP from '../../utils/http.codes';
 import { Item } from '../../model/item';
 import cart from '../../storage/cart';
 import styles from './styles';
-import { ApisauceInstance } from 'apisauce';
 import userSession from '../../storage/user.session';
 
-type State = { items: Item[] }
+type State = { items: Item[], total: number }
 
 export class CartScreen extends Component<any, State> {
 
@@ -25,18 +24,28 @@ export class CartScreen extends Component<any, State> {
         };
     };
 
-    private api: ApisauceInstance;
-
     private focusListener: any;
 
     constructor(props: any) {
         super(props);
-        this.state = { items: cart.get() };
+        this.state = {
+            items: [],
+            total: 0.0
+        };
     }
 
     private updateItems(): void {
-        const items: Item[] = cart.get();
-        this.setState({ items: items });
+        cart.get().then((items: Item[]) => {
+            this.setState({ items: items });
+
+            let total: number = 0.0;
+
+            items.forEach((item: Item) => {
+                total += item.price * item.amount;
+            });
+
+            this.setState({ total: total });
+        });
     }
 
     componentDidMount(): void {
@@ -50,33 +59,33 @@ export class CartScreen extends Component<any, State> {
     }
 
     private remove(item: Item): void {
-        cart.remove(item);
-        this.updateItems();
+        cart.remove(item).then(() => {
+            this.updateItems();
+        });
     }
 
     private invoice(): void {
-        api.setHeader(Authorization, "Bearer "+ userSession.getToken());
-        
-        api.post('sales/order/invoice', this.state.items).then((result: any) => {
-            if (result.status === HTTP.BAD_REQUEST) {
-                alert("You must login as a Customer to do the purchasing!");
-                this.props.navigation.navigate('Login');
-            } else if (result.status === HTTP.FORBIDDEN) {
-                alert("Validation failure, You are not logged!");
-                this.props.navigation.navigate('Login');
-            } else {
-                alert(result.status +": "+ result.data);
-            }
+        userSession.getToken().then((token: string) => {
+            api.setHeader(Authorization, "Bearer "+ token);
+
+            api.post('sales/order/invoice', this.state.items).then((result: any) => {
+                if (result.status === HTTP.BAD_REQUEST) {
+                    alert("Você precisa logar como Cliente para fechar o pedido!");
+                    this.props.navigation.navigate('Login');
+                } else if (result.status === HTTP.FORBIDDEN) {
+                    alert("Você precisa logar para fechar o pedido!");
+                    this.props.navigation.navigate('Login');
+                } else if (result.status === HTTP.OK) {
+                    cart.clear();
+                    this.props.navigation.navigate('SalesOrder');
+                } else {
+                    alert("Erro ao buscar os pedidos: "+JSON.stringify(result.data));
+                }
+            });
         });
     }
 
     public render(): ReactNode {
-        let total: number = 0.0;
-
-        this.state.items.forEach((item: Item) => {
-            total += item.price * item.amount;
-        });
-
         return (
             <Content>
                 <List dataArray={this.state.items} renderRow={(item: Item) => 
@@ -95,10 +104,10 @@ export class CartScreen extends Component<any, State> {
                     </ListItem>
                 } />
                 <ListItem last>
-                    <Text>Total do Pedido: R$ {total.toFixed(2)}</Text>
+                    <Text>Total do Pedido: R$ {this.state.total.toFixed(2)}</Text>
                 </ListItem>
 
-                <Button onPress={() => this.invoice()} style={styles.invoiceButton} block>
+                <Button disabled={this.state.items.length<=0} onPress={() => this.invoice()} style={styles.invoiceButton} block>
                     <Text>Fechar o Pedido</Text>
                 </Button>
 

@@ -5,8 +5,9 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 
-import navigator from './src/components/navigator';
 import { SideMenu } from './src/components/sidemenu';
+import salesOrder from './src/screens/sales-order';
+import navigator from './src/components/navigator';
 import login from './src/screens/login';
 
 Font.loadAsync({
@@ -18,6 +19,7 @@ Font.loadAsync({
 const AppContainer: any = createAppContainer(
     createDrawerNavigator({
         Main: navigator,
+        SalesOrder: salesOrder,
         Login: login,
     }, {
         contentComponent: SideMenu,

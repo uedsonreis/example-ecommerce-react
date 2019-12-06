@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import catalogStack from '../../screens/catalog';
-import salesOrderStack from '../../screens/sales-order';
+import cartStack from '../../screens/cart';
 
 class TabNavigatorFactory {
 
@@ -10,7 +10,7 @@ class TabNavigatorFactory {
         
         const tabNavigator: any = createBottomTabNavigator({
             catalogStack,
-            salesOrderStack
+            cartStack
         });
 
         tabNavigator.path = "";

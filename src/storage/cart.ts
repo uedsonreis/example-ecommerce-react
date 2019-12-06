@@ -7,14 +7,39 @@ class Cart {
 
     private static readonly LOCAL_VAR: string = "CART";
 
-    public get(): Item[] {
-        const value: any = storage.getItem(Cart.LOCAL_VAR);
-
-        if (value === undefined || value === null) {
-            return new Array<Item>();
-        } else {
+    public async get(): Promise<Item[]> {
+        const value: any = await storage.getItem(Cart.LOCAL_VAR);
+        if (value !== undefined && value !== null) {
             return JSON.parse(value) as Array<Item>;
+        } else {
+            return new Array<Item>();
         }
+    }
+
+    public async add(item: Item): Promise<void> {
+        const items: Item[] = await this.get();
+
+        const itemSaved: Item = this.getItem(items, item.product);
+        if (itemSaved) this.removeItem(items, itemSaved);
+        
+        if (itemSaved !== undefined && itemSaved !== null) {
+            itemSaved.amount = itemSaved.amount + item.amount;
+            items.push(itemSaved);
+        } else {
+            items.push(item);
+        }    
+        storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
+    }
+
+    public async remove(item: Item): Promise<void> {
+        const items: Item[] = await this.get();
+        const itemSaved: Item = this.getItem(items, item.product);
+        this.removeItem(items, itemSaved);
+        await storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
+    }
+
+    public async clear(): Promise<void> {
+        await storage.removeItem(Cart.LOCAL_VAR);
     }
 
     private getItem(items: Item[], product: Product): Item {
@@ -23,29 +48,6 @@ class Cart {
 
     private removeItem(items: Item[], item: Item): void {
         items.splice(items.indexOf(item), 1);
-    }
-
-    public add(item: Item): void {
-        const items: Array<Item> = this.get();
-
-        const itemSaved: Item = this.getItem(items, item.product);
-        if (itemSaved) this.removeItem(items, itemSaved);
-
-        if (itemSaved !== undefined && itemSaved !== null) {
-            itemSaved.amount = itemSaved.amount + item.amount;
-            items.push(itemSaved);
-        } else {
-            items.push(item);
-        }
-
-        storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
-    }
-
-    public remove(item: Item): void {
-        const items: Item[] = this.get();
-        const itemSaved: Item = this.getItem(items, item.product);
-        this.removeItem(items, itemSaved);
-        storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
     }
 
 }

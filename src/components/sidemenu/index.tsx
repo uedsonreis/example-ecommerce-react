@@ -21,7 +21,11 @@ export class SideMenu extends Component<any, any> {
                         <ListItem itemDivider><Text>Opções</Text></ListItem>
                         
                         <ListItem onPress={() => this.navigateToScreen('Main')}>
-                            <Text>Principal</Text>
+                            <Text>Compras</Text>
+                        </ListItem>
+
+                        <ListItem onPress={() => this.navigateToScreen('SalesOrder')}>
+                            <Text>Pedidos</Text>
                         </ListItem>
 
                         <ListItem onPress={() => this.navigateToScreen('Login')} last>

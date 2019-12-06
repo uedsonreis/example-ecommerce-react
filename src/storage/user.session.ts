@@ -11,11 +11,11 @@ class UserSession {
         storage.setItem(UserSession.TOKEN, token);
     }
 
-    public getToken(): string {
+    public async getToken(): Promise<string> {
         return storage.getItem(UserSession.TOKEN);
     }
 
-    public getLoggedUser(): string {
+    public async getLoggedUser(): Promise<string> {
         return storage.getItem(UserSession.LOGGED);
     }
 

@@ -3,11 +3,9 @@ import { Platform } from 'react-native';
 
 import { createStackNavigator } from 'react-navigation-stack';
 
-import { CartScreen } from './cart';
-import { InvoiceScreen } from './invoice';
-
-import { TabBarIcon } from '../../components/tab-bar-icon';
 import { Factory } from '../../utils/factory';
+import { SalesOrderScreen } from './sales.order';
+import { SalesOrderList } from './sales.order.list';
 
 class SalesOrderFactory extends Factory {
 
@@ -15,22 +13,11 @@ class SalesOrderFactory extends Factory {
 
         const stack: any = createStackNavigator(
             {
-                Cart: CartScreen,
-                Invoice: InvoiceScreen
+                List: SalesOrderList,
+                Order: SalesOrderScreen
             },
             this.config
         );
-
-        stack.navigationOptions = {
-            tabBarLabel: 'Carrinho',
-            tabBarIcon: ({ focused }) => {
-                const name: string = Platform.OS === 'ios' ? 'ios-cart' : 'md-cart';
-                return <TabBarIcon name={name} focused={focused} />;
-            },
-        };
-
-        stack.path = "";
-
         return stack;
     }
 }
