@@ -1,27 +1,22 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, Component } from 'react';
 import { Body, Content, List, ListItem, Text } from 'native-base';
 
 import { SalesOrder } from '../../model/sales.order';
 import { Item } from '../../model/item';
-import { SalesOrderScreen } from '.';
-import { ScreenView } from '../../utils/screen.view';
 
-type State = { salesOrder: SalesOrder }
+type Props = { salesOrder: SalesOrder, total: number };
 
-class Screen implements ScreenView {
+export class SalesOrderScreenView extends Component<Props, any> {
 
-    public render(pageCtrl: SalesOrderScreen): ReactNode {
-        let total: number = 0.0;
+    constructor(props: Props) {
+        super(props);
+    }
 
-        if (pageCtrl.state.salesOrder.items) {
-            pageCtrl.state.salesOrder.items.forEach((item: Item) => {
-                total += item.price * item.amount;
-            });
-        }
-
+    public render(): ReactNode {
+        const { salesOrder, total } = this.props;
         return (
             <Content>
-                <List dataArray={pageCtrl.state.salesOrder.items} renderRow={(item: Item) => 
+                <List dataArray={salesOrder.items} renderRow={(item: Item) => 
                     <ListItem>
                         <Body>
                             <Text>{item.product.factory.name} {item.product.name}</Text>
@@ -37,5 +32,3 @@ class Screen implements ScreenView {
         );
     }
 }
-
-export default new Screen();

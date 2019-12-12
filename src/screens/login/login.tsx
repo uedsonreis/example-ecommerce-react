@@ -2,92 +2,115 @@ import React, { Component, ReactNode } from "react";
 import { Content, List, ListItem, Button, Text, Label, Container, Segment, Input } from "native-base";
 
 import styles from "./styles";
-import { LoginScreen } from '.';
-import { ScreenView } from '../../utils/screen.view';
+import { User } from "../../model/user";
+import { Customer } from "../../model/customer";
 
-class Screen implements ScreenView {
+type AuthProps = { user: User, customer: Customer, actions: any };
+type State = { segmentA: boolean, segmentB: boolean };
 
-    private renderLogin(pageCtrl: LoginScreen): ReactNode {
-        return (
-            <Content>
-                <List>
-                    <ListItem>
-                        <Label><Text> Email: </Text></Label>
-                        <Input onChangeText={text => pageCtrl.state.user.login = text} />
-                    </ListItem>
-                    <ListItem>
-                        <Label><Text> Senha: </Text></Label>
-                        <Input secureTextEntry={true} onChangeText={text => pageCtrl.state.user.password = text} />
-                    </ListItem>
-                </List>
-    
-                <Button onPress={() => pageCtrl.login()} style={styles.loginButton} block>
-                    <Text>Entrar</Text>
-                </Button>
-            </Content>
-        );
-    }
-    
-    private renderRegister(pageCtrl: LoginScreen): ReactNode {
-        return (
-            <Content>
-                <List>
-                    <ListItem>
-                        <Label><Text> Email: </Text></Label>
-                        <Input onChangeText={text => pageCtrl.state.user.login = text} />
-                    </ListItem>
-                    <ListItem>
-                        <Label><Text> Senha: </Text></Label>
-                        <Input secureTextEntry={true} onChangeText={text => pageCtrl.state.user.password = text} />
-                    </ListItem>
-                    <ListItem>
-                        <Label><Text> Confirmar Senha: </Text></Label>
-                        <Input secureTextEntry={true} onChangeText={text => pageCtrl.setState({ confirmPass: text}) } />
-                    </ListItem>
-                    <ListItem>
-                        <Label><Text> Nome: </Text></Label>
-                        <Input onChangeText={text => pageCtrl.state.customer.name = text} />
-                    </ListItem>
-                    <ListItem>
-                        <Label><Text> Idade: </Text></Label>
-                        <Input keyboardType={'numeric'} onChangeText={age => pageCtrl.state.customer.age = Number(age)} />
-                    </ListItem>
-                    <ListItem>
-                        <Label><Text> Endereço: </Text></Label>
-                        <Input onChangeText={text => pageCtrl.state.customer.address = text} />
-                    </ListItem>
-                </List>
-    
-                <Button onPress={() => pageCtrl.signup()} style={styles.loginButton} block>
-                    <Text>Registrar</Text>
-                </Button>
-            </Content>
-        );
+export class AuthScreenView extends Component<AuthProps, State> {
+
+    constructor(props: AuthProps) {
+        super(props);
+
+        this.state = { segmentA: true, segmentB: false };
     }
 
-    private renderContent(pageCtrl: LoginScreen): ReactNode {
-        if (pageCtrl.state.segmentA) {
-            return this.renderLogin(pageCtrl);
+    private changeActiveSegment(): void {
+        this.setState({ segmentA: !this.state.segmentA, segmentB: !this.state.segmentB });
+    }
+
+    private renderContent(): ReactNode {
+        const { user, customer, actions } = this.props;
+
+        if (this.state.segmentA) {
+            return ( <LoginScreenView user={user} actions={actions} /> );
         } else {
-            return this.renderRegister(pageCtrl);
+            return ( <RegisterScreenView user={user} customer={customer} actions={actions} /> );
         }
     }
-    
-    public render(pageCtrl: LoginScreen): ReactNode {
+
+    public render(): ReactNode {
         return (
             <Container>
                 <Segment>
-                    <Button first active={pageCtrl.state.segmentA} onPress={() => pageCtrl.changeActiveSegment()}>
+                    <Button first active={this.state.segmentA} onPress={() => this.changeActiveSegment()}>
                         <Text>Entrar</Text>
                     </Button>
-                    <Button last active={pageCtrl.state.segmentB} onPress={() => pageCtrl.changeActiveSegment()}>
+                    <Button last active={this.state.segmentB} onPress={() => this.changeActiveSegment()}>
                         <Text>Registrar</Text>
                     </Button>
                 </Segment>
-                {this.renderContent(pageCtrl)}
+                {this.renderContent()}
             </Container>
         );
     }
 }
 
-export default new Screen();
+type LoginProps = { user: User, actions: any };
+
+export class LoginScreenView extends Component<LoginProps, any> {
+    public render(): ReactNode {
+        const { user, actions } = this.props;
+        return (
+            <Content>
+                <List>
+                    <ListItem>
+                        <Label><Text> Email: </Text></Label>
+                        <Input onChangeText={text => user.login = text} />
+                    </ListItem>
+                    <ListItem>
+                        <Label><Text> Senha: </Text></Label>
+                        <Input secureTextEntry={true} onChangeText={text => user.password = text} />
+                    </ListItem>
+                </List>
+    
+                <Button onPress={() => actions.login()} style={styles.loginButton} block>
+                    <Text>Entrar</Text>
+                </Button>
+            </Content>
+        );
+    }
+}
+
+type RegisterProps = { user: User, customer: Customer, actions: any };
+
+export class RegisterScreenView extends Component<RegisterProps, any> {
+    public render(): ReactNode {
+        const { user, customer, actions } = this.props;
+        return (
+            <Content>
+                <List>
+                    <ListItem>
+                        <Label><Text> Email: </Text></Label>
+                        <Input onChangeText={text => user.login = text} />
+                    </ListItem>
+                    <ListItem>
+                        <Label><Text> Senha: </Text></Label>
+                        <Input secureTextEntry={true} onChangeText={text => user.password = text} />
+                    </ListItem>
+                    <ListItem>
+                        <Label><Text> Confirmar Senha: </Text></Label>
+                        <Input secureTextEntry={true} onChangeText={text => actions.setState({ confirmPass: text}) } />
+                    </ListItem>
+                    <ListItem>
+                        <Label><Text> Nome: </Text></Label>
+                        <Input onChangeText={text => customer.name = text} />
+                    </ListItem>
+                    <ListItem>
+                        <Label><Text> Idade: </Text></Label>
+                        <Input keyboardType={'numeric'} onChangeText={age => customer.age = Number(age)} />
+                    </ListItem>
+                    <ListItem>
+                        <Label><Text> Endereço: </Text></Label>
+                        <Input onChangeText={text => customer.address = text} />
+                    </ListItem>
+                </List>
+    
+                <Button onPress={() => actions.signup()} style={styles.loginButton} block>
+                    <Text>Registrar</Text>
+                </Button>
+            </Content>
+        );
+    }
+}

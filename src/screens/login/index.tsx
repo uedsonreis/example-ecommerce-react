@@ -8,11 +8,9 @@ import { MenuIcon } from "../../components/sidemenu/menu.icon";
 import { User } from "../../model/user";
 import session from '../../storage/user.session';
 import { Customer } from "../../model/customer";
-import screenView from './login';
+import { AuthScreenView } from "./login";
 
 type State = {
-    segmentA: boolean,
-    segmentB: boolean,
     customer: Customer,
     user: User,
     confirmPass: string
@@ -33,16 +31,10 @@ export class LoginScreen extends Component<any, State> {
         super(props);
         
         this.state = {
-            segmentA: true,
-            segmentB: false,
             user: new User(),
             customer: new Customer(),
             confirmPass: ""
         };
-    }
-
-    public changeActiveSegment(): void {
-        this.setState({ segmentA: !this.state.segmentA, segmentB: !this.state.segmentB });
     }
 
     private navigateToScreen(route: string) {
@@ -105,7 +97,7 @@ export class LoginScreen extends Component<any, State> {
     }
 
     public render(): ReactNode {
-        return screenView.render(this);
+        return <AuthScreenView user={this.state.user} customer={this.state} actions={this} />
     }
 
 }

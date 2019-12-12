@@ -2,7 +2,8 @@ import React, { Component, ReactNode } from 'react';
 import { Text } from 'native-base';
 
 import { SalesOrder } from '../../model/sales.order';
-import screen from './sales.order';
+import { SalesOrderScreenView } from './sales.order';
+import { Item } from '../../model/item';
 
 type State = { salesOrder: SalesOrder }
 
@@ -22,6 +23,14 @@ export class SalesOrderScreen extends Component<any, State> {
     }
 
     public render(): ReactNode {
-        return screen.render(this);
+        let total: number = 0.0;
+
+        if (this.state.salesOrder.items) {
+            this.state.salesOrder.items.forEach((item: Item) => {
+                total += item.price * item.amount;
+            });
+        }
+
+        return <SalesOrderScreenView salesOrder={this.state.salesOrder} total={total} />
     }
 }

@@ -6,7 +6,7 @@ import { CatalogScreen } from '../../screens/catalog';
 import { CartScreen } from '../../screens/cart';
 import { Platform } from 'react-native';
 import { TabBarIcon } from '../tab-bar-icon';
-import { PickupScreen } from '../../screens/catalog/pickup';
+import { ProductScreen } from '../../screens/product';
 
 class TabNavigatorFactory {
 
@@ -17,7 +17,7 @@ class TabNavigatorFactory {
 
     private createCatalogStack(): any {
         const stack: any = createStackNavigator(
-            { Catalog: CatalogScreen, Pickup: PickupScreen },
+            { Catalog: CatalogScreen, Pickup: ProductScreen },
             this.config
         );
 

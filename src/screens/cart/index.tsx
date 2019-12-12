@@ -7,7 +7,7 @@ import HTTP from '../../utils/http.codes';
 import { Item } from '../../model/item';
 import cartStorage from '../../storage/cart.storage';
 import userSession from '../../storage/user.session';
-import screenView from './cart';
+import { CartScreenView } from './cart';
 
 type State = { items: Item[], total: number }
 
@@ -84,6 +84,8 @@ export class CartScreen extends Component<any, State> {
     }
 
     public render(): ReactNode {
-        return screenView.render(this);
+        return (
+            <CartScreenView items={this.state.items} total={this.state.total} actions={this} />
+        );
     }
 }

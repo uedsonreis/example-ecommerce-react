@@ -1,19 +1,21 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, Component } from 'react';
 import { Right, Body, Text, List, ListItem, Content } from 'native-base';
 
 import { SalesOrder } from '../../model/sales.order';
-import { ScreenView } from '../../utils/screen.view';
-import { SalesOrderListScreen } from '.';
 
-class Screen implements ScreenView {
+type Props = { salesOrders: SalesOrder[], actions: any };
 
-    public render(pageCtrl: SalesOrderListScreen): ReactNode {
+export class SalesOrderListScreenView extends Component<Props, any> {
+
+    public render(): ReactNode {
+        const { salesOrders, actions } = this.props;
+
         return (
             <Content>
-                <List dataArray={pageCtrl.state.salesOrders} renderRow={(salesOrder: SalesOrder) => 
-                    <ListItem noIndent onPress={() => pageCtrl.props.navigation.navigate('Order', salesOrder) }>
+                <List dataArray={salesOrders} renderRow={(salesOrder: SalesOrder) => 
+                    <ListItem noIndent onPress={() => actions.props.navigation.navigate('Order', salesOrder) }>
                         <Body>
-                            <Text>{pageCtrl.formatDate(salesOrder.createdAt.toString())}</Text>
+                            <Text>{actions.formatDate(salesOrder.createdAt.toString())}</Text>
                             <Text note>Pedido nº {salesOrder.id}</Text>
                         </Body>
                         <Right>
@@ -25,5 +27,3 @@ class Screen implements ScreenView {
         );
     }
 }
-
-export default new Screen();

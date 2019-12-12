@@ -7,7 +7,7 @@ import HTTP from '../../utils/http.codes';
 
 import { MenuIcon } from '../../components/sidemenu/menu.icon';
 import { SalesOrder } from '../../model/sales.order';
-import screen from './sales.order.list';
+import { SalesOrderListScreenView } from './sales.order.list';
 
 type State = { salesOrders: SalesOrder[] };
 
@@ -59,6 +59,8 @@ export class SalesOrderListScreen extends Component<any, State> {
     }
 
     public render(): ReactNode {
-        return screen.render(this);
+        return (
+            <SalesOrderListScreenView salesOrders={this.state.salesOrders} actions={this} />
+        );
     }
 }

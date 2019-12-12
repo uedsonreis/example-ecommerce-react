@@ -4,6 +4,7 @@ import { Right, Body, Text, List, ListItem, Content } from 'native-base';
 import api from '../../utils/connection.api';
 import { Product } from '../../model/product';
 import { MenuIcon } from '../../components/sidemenu/menu.icon';
+import { CatalogScreenView } from './catalog';
 
 type State = { products: Product[] };
 
@@ -35,19 +36,7 @@ export class CatalogScreen extends Component<any, State> {
 
     public render(): ReactNode {
         return (
-            <Content>
-                <List dataArray={this.state.products} renderRow={(product: Product) => 
-                    <ListItem noIndent onPress={() => this.props.navigation.navigate('Pickup', product) }>
-                        <Body>
-                            <Text>{product.name}</Text>
-                            <Text note>{product.factory.name}</Text>
-                        </Body>
-                        <Right>
-                            <Text note>R$ {product.price.toFixed(2)}</Text>
-                        </Right>
-                    </ListItem>
-                } />
-            </Content>
+            <CatalogScreenView products={this.state.products} actions={this} />
         );
     }
 }
