@@ -7,10 +7,11 @@ import HTTP from '../../utils/http.codes';
 
 import { MenuIcon } from '../../components/sidemenu/menu.icon';
 import { SalesOrder } from '../../model/sales.order';
+import screen from './sales.order.list';
 
 type State = { salesOrders: SalesOrder[] };
 
-export class SalesOrderList extends Component<any, State> {
+export class SalesOrderListScreen extends Component<any, State> {
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -48,7 +49,7 @@ export class SalesOrderList extends Component<any, State> {
         });
     }
 
-    private formatDate(dateText: string): string {
+    public formatDate(dateText: string): string {
         const day: string = dateText.substring(8, 10);
         const month: string = dateText.substring(5, 7);
         const year: string = dateText.substring(0, 4);
@@ -58,20 +59,6 @@ export class SalesOrderList extends Component<any, State> {
     }
 
     public render(): ReactNode {
-        return (
-            <Content>
-                <List dataArray={this.state.salesOrders} renderRow={(salesOrder: SalesOrder) => 
-                    <ListItem noIndent onPress={() => this.props.navigation.navigate('Order', salesOrder) }>
-                        <Body>
-                            <Text>{this.formatDate(salesOrder.createdAt.toString())}</Text>
-                            <Text note>Pedido nº {salesOrder.id}</Text>
-                        </Body>
-                        <Right>
-                            <Text note>R$ {salesOrder.totalValue.toFixed(2)}</Text>
-                        </Right>
-                    </ListItem>
-                } />
-            </Content>
-        );
+        return screen.render(this);
     }
 }

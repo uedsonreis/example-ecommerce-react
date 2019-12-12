@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Text, Content, Label, ListItem, Button, List, Form, Card } from 'native-base';
 
-import cart from '../../storage/cart';
+import cartStorage from '../../storage/cart.storage';
 import { Product } from '../../model/product';
 import { Item } from '../../model/item';
 import styles from './styles';
@@ -31,7 +31,7 @@ export class PickupScreen extends Component<any, State> {
             price: this.state.product.price,
         };
 
-        cart.add(item);
+        cartStorage.add(item);
         this.props.navigation.pop();
     }
 

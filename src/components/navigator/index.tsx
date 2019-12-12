@@ -1,23 +1,63 @@
 import React from 'react';
+import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import catalogStack from '../../screens/catalog';
-import cartStack from '../../screens/cart';
+import { CatalogScreen } from '../../screens/catalog';
+import { CartScreen } from '../../screens/cart';
+import { Platform } from 'react-native';
+import { TabBarIcon } from '../tab-bar-icon';
+import { PickupScreen } from '../../screens/catalog/pickup';
 
 class TabNavigatorFactory {
 
-    public create(): any {
-        
+    private readonly config: any = Platform.select({
+        web: { headerMode: 'screen' },
+        default: {},
+    });
+
+    private createCatalogStack(): any {
+        const stack: any = createStackNavigator(
+            { Catalog: CatalogScreen, Pickup: PickupScreen },
+            this.config
+        );
+
+        stack.navigationOptions = {
+            tabBarLabel: 'Catálogo',
+            tabBarIcon: ({ focused }) => {
+                const name: string = Platform.OS === 'ios' ? 'ios-list' : 'md-list';
+                return <TabBarIcon name={name} focused={focused} />;
+            },
+        };
+
+        stack.path = "";
+        return stack;
+    }
+
+    private createCartStack(): any {
+        const stack: any = createStackNavigator({ Cart: CartScreen }, this.config);
+
+        stack.navigationOptions = {
+            tabBarLabel: 'Carrinho',
+            tabBarIcon: ({ focused }) => {
+                const name: string = Platform.OS === 'ios' ? 'ios-cart' : 'md-cart';
+                return <TabBarIcon name={name} focused={focused} />;
+            },
+        };
+
+        stack.path = "";
+        return stack;
+    }
+
+    public createTabNavigator(): any {
         const tabNavigator: any = createBottomTabNavigator({
-            catalogStack,
-            cartStack
+            catalogStack: this.createCatalogStack(),
+            cartStack: this.createCartStack()
         });
 
         tabNavigator.path = "";
-
         return tabNavigator;
     }
 }
 
 const factory: TabNavigatorFactory = new TabNavigatorFactory();
-export default factory.create();
+export default factory.createTabNavigator();

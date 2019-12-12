@@ -3,12 +3,12 @@ import { Product } from '../model/product';
 
 import storage from './local.storage';
 
-class Cart {
+class CartStorage {
 
     private static readonly LOCAL_VAR: string = "CART";
 
     public async get(): Promise<Item[]> {
-        const value: any = await storage.getItem(Cart.LOCAL_VAR);
+        const value: any = await storage.getItem(CartStorage.LOCAL_VAR);
         if (value !== undefined && value !== null) {
             return JSON.parse(value) as Array<Item>;
         } else {
@@ -28,18 +28,18 @@ class Cart {
         } else {
             items.push(item);
         }    
-        storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
+        storage.setItem(CartStorage.LOCAL_VAR, JSON.stringify(items));
     }
 
     public async remove(item: Item): Promise<void> {
         const items: Item[] = await this.get();
         const itemSaved: Item = this.getItem(items, item.product);
         this.removeItem(items, itemSaved);
-        await storage.setItem(Cart.LOCAL_VAR, JSON.stringify(items));
+        await storage.setItem(CartStorage.LOCAL_VAR, JSON.stringify(items));
     }
 
     public async clear(): Promise<void> {
-        await storage.removeItem(Cart.LOCAL_VAR);
+        await storage.removeItem(CartStorage.LOCAL_VAR);
     }
 
     private getItem(items: Item[], product: Product): Item {
@@ -52,4 +52,4 @@ class Cart {
 
 }
 
-export default new Cart();
+export default new CartStorage();

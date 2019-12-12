@@ -1,26 +1,27 @@
-import React from 'react';
-import { Platform } from 'react-native';
+import React, { Component, ReactNode } from 'react';
+import { Text } from 'native-base';
 
-import { createStackNavigator } from 'react-navigation-stack';
+import { SalesOrder } from '../../model/sales.order';
+import screen from './sales.order';
 
-import { Factory } from '../../utils/factory';
-import { SalesOrderScreen } from './sales.order';
-import { SalesOrderList } from './sales.order.list';
+type State = { salesOrder: SalesOrder }
 
-class SalesOrderFactory extends Factory {
+export class SalesOrderScreen extends Component<any, State> {
 
-    public createStack(): any {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: () => <Text>Pedido Nº {navigation.state.params.id}</Text>
+        };
+    };
 
-        const stack: any = createStackNavigator(
-            {
-                List: SalesOrderList,
-                Order: SalesOrderScreen
-            },
-            this.config
-        );
-        return stack;
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            salesOrder: this.props.navigation.state.params
+        };
+    }
+
+    public render(): ReactNode {
+        return screen.render(this);
     }
 }
-
-const factory: SalesOrderFactory = new SalesOrderFactory();
-export default factory.createStack();

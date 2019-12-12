@@ -1,39 +1,27 @@
-import React, { Component, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Body, Content, List, ListItem, Text } from 'native-base';
 
-import { MenuIcon } from '../../components/sidemenu/menu.icon';
 import { SalesOrder } from '../../model/sales.order';
 import { Item } from '../../model/item';
+import { SalesOrderScreen } from '.';
+import { ScreenView } from '../../utils/screen.view';
 
 type State = { salesOrder: SalesOrder }
 
-export class SalesOrderScreen extends Component<any, State> {
+class Screen implements ScreenView {
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerTitle: () => <Text>Pedido Nº {navigation.state.params.id}</Text>
-        };
-    };
-
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            salesOrder: this.props.navigation.state.params
-        };
-    }
-
-    public render(): ReactNode {
+    public render(pageCtrl: SalesOrderScreen): ReactNode {
         let total: number = 0.0;
 
-        if (this.state.salesOrder.items) {
-            this.state.salesOrder.items.forEach((item: Item) => {
+        if (pageCtrl.state.salesOrder.items) {
+            pageCtrl.state.salesOrder.items.forEach((item: Item) => {
                 total += item.price * item.amount;
             });
         }
 
         return (
             <Content>
-                <List dataArray={this.state.salesOrder.items} renderRow={(item: Item) => 
+                <List dataArray={pageCtrl.state.salesOrder.items} renderRow={(item: Item) => 
                     <ListItem>
                         <Body>
                             <Text>{item.product.factory.name} {item.product.name}</Text>
@@ -49,3 +37,5 @@ export class SalesOrderScreen extends Component<any, State> {
         );
     }
 }
+
+export default new Screen();

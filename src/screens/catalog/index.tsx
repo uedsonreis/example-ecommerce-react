@@ -1,37 +1,53 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator } from 'react-navigation-stack';
+import React, { Component, ReactNode } from 'react';
+import { Right, Body, Text, List, ListItem, Content } from 'native-base';
 
-import { CatalogScreen } from './product.list';
-import { PickupScreen } from './pickup';
-import { TabBarIcon } from '../../components/tab-bar-icon';
-import { Factory } from '../../utils/factory';
+import api from '../../utils/connection.api';
+import { Product } from '../../model/product';
+import { MenuIcon } from '../../components/sidemenu/menu.icon';
 
-class CatalogFactory extends Factory {
+type State = { products: Product[] };
 
-    public createStack(): any {
+export class CatalogScreen extends Component<any, State> {
 
-        const stack: any = createStackNavigator(
-            {
-                Catalog: CatalogScreen,
-                Pickup: PickupScreen
-            },
-            this.config
-        );
-
-        stack.navigationOptions = {
-            tabBarLabel: 'Catálogo',
-            tabBarIcon: ({ focused }) => {
-                const name: string = Platform.OS === 'ios' ? 'ios-list' : 'md-list';
-                return <TabBarIcon name={name} focused={focused} />;
-            },
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: () => <Text>Catálogo</Text>,
+            headerLeft: () => (
+                <MenuIcon navigation={navigation} />
+            ),
         };
+    };
 
-        stack.path = "";
+    constructor(props: any) {
+        super(props);
 
-        return stack;
+        this.state = { products: undefined };
+
+        this.updateProductList();
+    }
+
+    private updateProductList(): void {
+        api.get('product/list').then((result: any) => {
+            this.setState({ products: result.data });
+            console.log("Products: ", this.state.products);
+        });
+    }
+
+    public render(): ReactNode {
+        return (
+            <Content>
+                <List dataArray={this.state.products} renderRow={(product: Product) => 
+                    <ListItem noIndent onPress={() => this.props.navigation.navigate('Pickup', product) }>
+                        <Body>
+                            <Text>{product.name}</Text>
+                            <Text note>{product.factory.name}</Text>
+                        </Body>
+                        <Right>
+                            <Text note>R$ {product.price.toFixed(2)}</Text>
+                        </Right>
+                    </ListItem>
+                } />
+            </Content>
+        );
     }
 }
-
-const factory: CatalogFactory = new CatalogFactory();
-export default factory.createStack();
