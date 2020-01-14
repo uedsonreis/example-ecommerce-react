@@ -24,13 +24,13 @@ target 'AppEcommerceReact' do
     pod 'React-Core/RCTWebSocket', :path => '../node_modules/react-native/'
     #pod 'React-RCTPushNotification', :path => '../node_modules/react-native/Libraries/PushNotificationIOS'
     #pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
-
     pod 'React-cxxreact', :path => '../node_modules/react-native/ReactCommon/cxxreact'
     pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
     pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
     pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
     pod 'ReactCommon/jscallinvoker', :path => "../node_modules/react-native/ReactCommon"
     pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
+    
     pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
     pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
     pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'

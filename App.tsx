@@ -19,11 +19,10 @@ Font.loadAsync({
 });
 
 const salesOrderStack: any = createStackNavigator(
-    { List: SalesOrderListScreen, Order: SalesOrderScreen },
-    this.config
+    { List: SalesOrderListScreen, Order: SalesOrderScreen }
 );
 
-const loginStack: any = createStackNavigator({ LoginScreen }, this.config);
+const loginStack: any = createStackNavigator({ LoginScreen });
 
 const AppContainer: any = createAppContainer(
     createDrawerNavigator({
