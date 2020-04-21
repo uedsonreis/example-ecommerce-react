@@ -1,28 +1,17 @@
 import React, { Component, ReactNode } from 'react';
-import { Right, Body, Text, List, ListItem, Content } from 'native-base';
 
 import api from '../../utils/connection.api';
 import { Product } from '../../model/product';
-import { MenuIcon } from '../../components/sidemenu/menu.icon';
-import { CatalogScreenView } from './catalog';
+import { CatalogView } from './view';
 
 type State = { products: Product[] };
 
 export class CatalogScreen extends Component<any, State> {
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerTitle: () => <Text>Catálogo</Text>,
-            headerLeft: () => (
-                <MenuIcon navigation={navigation} />
-            ),
-        };
-    };
-
     constructor(props: any) {
         super(props);
 
-        this.state = { products: undefined };
+        this.state = { products: [] };
 
         this.updateProductList();
     }
@@ -36,7 +25,7 @@ export class CatalogScreen extends Component<any, State> {
 
     public render(): ReactNode {
         return (
-            <CatalogScreenView products={this.state.products} actions={this} />
+            <CatalogView products={this.state.products} actions={this} />
         );
     }
 }

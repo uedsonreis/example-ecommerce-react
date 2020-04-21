@@ -1,28 +1,15 @@
 import React, { Component, ReactNode } from 'react';
-import { Text } from 'native-base';
 
-import { MenuIcon } from '../../components/sidemenu/menu.icon';
 import api, { Authorization } from '../../utils/connection.api';
 import HTTP from '../../utils/http.codes';
 import { Item } from '../../model/item';
 import cartStorage from '../../storage/cart.storage';
 import userSession from '../../storage/user.session';
-import { CartScreenView } from './cart';
+import { CartView } from './view';
 
 type State = { items: Item[], total: number }
 
 export class CartScreen extends Component<any, State> {
-
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerTitle: () => <Text>Carrinho de Compras</Text>,
-            headerLeft: () => (
-                <MenuIcon navigation={navigation} />
-            )
-        };
-    };
-
-    private focusListener: any;
 
     constructor(props: any) {
         super(props);
@@ -39,7 +26,7 @@ export class CartScreen extends Component<any, State> {
             let total: number = 0.0;
 
             items.forEach((item: Item) => {
-                total += item.price * item.amount;
+                total += item.price! * item.amount!;
             });
 
             this.setState({ total: total });
@@ -47,13 +34,7 @@ export class CartScreen extends Component<any, State> {
     }
 
     componentDidMount(): void {
-        this.focusListener = this.props.navigation.addListener('didFocus', () => {
-            this.updateItems();
-        });
-    }
-
-    componentWillUnmount(): void {
-        this.focusListener.remove();
+        this.updateItems();
     }
 
     public remove(item: Item): void {
@@ -69,10 +50,10 @@ export class CartScreen extends Component<any, State> {
             api.post('sales/order/invoice', this.state.items).then((result: any) => {
                 if (result.status === HTTP.BAD_REQUEST) {
                     alert("Você precisa logar como Cliente para fechar o pedido!");
-                    this.props.navigation.navigate('Login');
+                    this.props.navigation.navigate('login');
                 } else if (result.status === HTTP.FORBIDDEN) {
                     alert("Você precisa logar para fechar o pedido!");
-                    this.props.navigation.navigate('Login');
+                    this.props.navigation.navigate('login');
                 } else if (result.status === HTTP.OK) {
                     cartStorage.clear();
                     this.props.navigation.navigate('SalesOrder');
@@ -85,7 +66,7 @@ export class CartScreen extends Component<any, State> {
 
     public render(): ReactNode {
         return (
-            <CartScreenView items={this.state.items} total={this.state.total} actions={this} />
+            <CartView items={this.state.items} total={this.state.total} actions={this} />
         );
     }
 }

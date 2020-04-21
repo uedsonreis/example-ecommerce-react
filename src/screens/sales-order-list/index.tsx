@@ -1,30 +1,19 @@
 import React, { Component, ReactNode } from 'react';
-import { Right, Body, Text, List, ListItem, Content } from 'native-base';
 
 import api, { Authorization } from '../../utils/connection.api';
 import userSession from '../../storage/user.session';
 import HTTP from '../../utils/http.codes';
 
-import { MenuIcon } from '../../components/sidemenu/menu.icon';
 import { SalesOrder } from '../../model/sales.order';
-import { SalesOrderListScreenView } from './sales.order.list';
+import { SalesOrderListView } from './view';
 
 type State = { salesOrders: SalesOrder[] };
 
 export class SalesOrderListScreen extends Component<any, State> {
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerTitle: () => <Text>Meus Pedidos</Text>,
-            headerLeft: () => (
-                <MenuIcon navigation={navigation} />
-            ),
-        };
-    };
-
     constructor(props: any) {
         super(props);
-        this.state = { salesOrders: undefined };
+        this.state = { salesOrders: [] };
         this.updateList();
     }
 
@@ -60,7 +49,7 @@ export class SalesOrderListScreen extends Component<any, State> {
 
     public render(): ReactNode {
         return (
-            <SalesOrderListScreenView salesOrders={this.state.salesOrders} actions={this} />
+            <SalesOrderListView salesOrders={this.state.salesOrders} actions={this} />
         );
     }
 }

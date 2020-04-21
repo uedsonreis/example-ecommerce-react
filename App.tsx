@@ -1,38 +1,34 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import SideMenu from './src/components/SideMenu';
+import TabNavigator from './src/components/TabNavigator';
+import LoginStack from './src/components/LoginStack';
+import SalesOrderStack from './src/components/SalesOrderStack';
 import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 
-import { SideMenu } from './src/components/sidemenu';
-import navigator from './src/components/navigator';
-import { SalesOrderListScreen } from './src/screens/sales-order-list';
-import { SalesOrderScreen } from './src/screens/sales-order';
-import { LoginScreen } from './src/screens/login';
+// const AppContainer: any = createAppContainer(
+//     createDrawerNavigator({
+//         Main: navigator,
+//         SalesOrder: createSalesOrderStack(),
+//         Login: createLoginStack(),
+//     }, {
+//         contentComponent: SideMenu,
+//         drawerWidth: Dimensions.get('window').width - 120
+//     })
+// );
 
-Font.loadAsync({
-    Roboto: require('native-base/Fonts/Roboto.ttf'),
-    Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-    ...Ionicons.font,
-});
+export default function App() {
+    const Drawer = createDrawerNavigator();
 
-const salesOrderStack: any = createStackNavigator(
-    { List: SalesOrderListScreen, Order: SalesOrderScreen }
-);
-
-const loginStack: any = createStackNavigator({ LoginScreen });
-
-const AppContainer: any = createAppContainer(
-    createDrawerNavigator({
-        Main: navigator,
-        SalesOrder: salesOrderStack,
-        Login: loginStack,
-    }, {
-        contentComponent: SideMenu,
-        drawerWidth: Dimensions.get('window').width - 120
-    })
-);
-
-export default AppContainer;
+    return (
+        <NavigationContainer>
+            <Drawer.Navigator initialRouteName="main" drawerContent={SideMenu} >
+                <Drawer.Screen name="main" component={TabNavigator} />
+                <Drawer.Screen name="salesOrder" component={SalesOrderStack} />
+                <Drawer.Screen name="login" component={LoginStack} />
+            </Drawer.Navigator>
+        </NavigationContainer>
+    );
+}

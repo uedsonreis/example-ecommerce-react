@@ -19,11 +19,11 @@ class CartStorage {
     public async add(item: Item): Promise<void> {
         const items: Item[] = await this.get();
 
-        const itemSaved: Item = this.getItem(items, item.product);
+        const itemSaved: Item = this.getItem(items, item.product!)!;
         if (itemSaved) this.removeItem(items, itemSaved);
         
         if (itemSaved !== undefined && itemSaved !== null) {
-            itemSaved.amount = itemSaved.amount + item.amount;
+            itemSaved.amount = itemSaved.amount! + item.amount!;
             items.push(itemSaved);
         } else {
             items.push(item);
@@ -33,7 +33,7 @@ class CartStorage {
 
     public async remove(item: Item): Promise<void> {
         const items: Item[] = await this.get();
-        const itemSaved: Item = this.getItem(items, item.product);
+        const itemSaved: Item = this.getItem(items, item.product!)!;
         this.removeItem(items, itemSaved);
         await storage.setItem(CartStorage.LOCAL_VAR, JSON.stringify(items));
     }
@@ -42,8 +42,8 @@ class CartStorage {
         await storage.removeItem(CartStorage.LOCAL_VAR);
     }
 
-    private getItem(items: Item[], product: Product): Item {
-        return items.find((item: Item) => item.product.id === product.id);
+    private getItem(items: Item[], product: Product): Item | undefined {
+        return items.find((item: Item) => item.product!.id === product.id);
     }
 
     private removeItem(items: Item[], item: Item): void {

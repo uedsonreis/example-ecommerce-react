@@ -1,5 +1,4 @@
 import storage from './local.storage';
-import { User } from '../model/user';
 
 class UserSession {
 

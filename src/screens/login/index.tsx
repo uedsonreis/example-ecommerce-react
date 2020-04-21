@@ -1,14 +1,12 @@
 import React, { Component, ReactNode } from "react";
-import { Button, Text, Container, Segment } from "native-base";
-import { NavigationActions } from "react-navigation";
-import { DrawerActions } from "react-navigation-drawer";
+import { Text } from "native-base";
 
 import api from '../../utils/connection.api';
-import { MenuIcon } from "../../components/sidemenu/menu.icon";
+import { MenuIcon } from "../../components/SideMenu/menu.icon";
 import { User } from "../../model/user";
 import session from '../../storage/user.session';
 import { Customer } from "../../model/customer";
-import { AuthScreenView } from "./login";
+import { AuthScreenView } from "./view";
 
 type State = {
     customer: Customer,
@@ -18,11 +16,11 @@ type State = {
 
 export class LoginScreen extends Component<any, State> {
 
-    static navigationOptions = ({ navigation }) => {
+    static navigationOptions = (props: any) => {
         return {
             headerTitle: () => <Text>Autenticação</Text>,
             headerLeft: () => (
-                <MenuIcon navigation={navigation} />
+                <MenuIcon navigation={props.navigation} />
             ),
         };
     };
@@ -35,14 +33,6 @@ export class LoginScreen extends Component<any, State> {
             customer: new Customer(),
             confirmPass: ""
         };
-    }
-
-    private navigateToScreen(route: string) {
-        const navigateAction = NavigationActions.navigate({
-            routeName: route
-        });
-        this.props.navigation.dispatch(navigateAction);
-        this.props.navigation.dispatch(DrawerActions.closeDrawer())
     }
 
     private validateForm(): boolean {
@@ -77,8 +67,8 @@ export class LoginScreen extends Component<any, State> {
 
         api.post('user/customer/add', this.state.customer).then((result: any) => {
             if (result.ok) {
-                session.login(this.state.customer.email, result.data);
-                this.navigateToScreen('Cart');
+                session.login(this.state.customer.email!, result.data);
+                this.props.navigation.navigate('salesOrder');
             } else {
                 alert("Ocorreu um erro ao salvar o usuário: "+ JSON.stringify(result.data));
             }
@@ -88,8 +78,8 @@ export class LoginScreen extends Component<any, State> {
     public login(): void {
         api.post('user/login', this.state.user).then((result: any) => {
             if (result.ok) {
-                session.login(this.state.user.login, result.data);
-                this.navigateToScreen('Cart');
+                session.login(this.state.user.login!, result.data);
+                this.props.navigation.navigate('salesOrder');
             } else {
                 alert("Login ou senha inválido(a).");
             }
@@ -97,7 +87,7 @@ export class LoginScreen extends Component<any, State> {
     }
 
     public render(): ReactNode {
-        return <AuthScreenView user={this.state.user} customer={this.state} actions={this} />
+        return <AuthScreenView user={this.state.user} customer={this.state.customer} actions={this} />
     }
 
 }

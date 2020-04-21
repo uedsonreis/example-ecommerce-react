@@ -1,6 +1,5 @@
 import React, { Component, ReactNode } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { NavigationActions } from "react-navigation";
 import { Ionicons } from "@expo/vector-icons";
 import { Platform } from "react-native";
 
