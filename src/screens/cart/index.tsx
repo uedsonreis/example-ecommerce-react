@@ -17,20 +17,23 @@ export class CartScreen extends Component<any, State> {
             items: [],
             total: 0.0
         };
+
+        cartStorage.addObserver(() => {
+            this.updateItems();
+        });
     }
 
-    private updateItems(): void {
-        cartStorage.get().then((items: Item[]) => {
-            this.setState({ items: items });
+    private async updateItems(): Promise<void> {
+        const items: Item[] = cartStorage.items;
+        this.setState({ items: items });
 
-            let total: number = 0.0;
+        let total: number = 0.0;
 
-            items.forEach((item: Item) => {
-                total += item.price! * item.amount!;
-            });
-
-            this.setState({ total: total });
+        items.forEach((item: Item) => {
+            total += item.price! * item.amount!;
         });
+
+        this.setState({ total: total });
     }
 
     componentDidMount(): void {
@@ -56,7 +59,7 @@ export class CartScreen extends Component<any, State> {
                     this.props.navigation.navigate('login');
                 } else if (result.status === HTTP.OK) {
                     cartStorage.clear();
-                    this.props.navigation.navigate('SalesOrder');
+                    this.props.navigation.navigate('salesOrder');
                 } else {
                     alert("Erro ao buscar os pedidos: "+JSON.stringify(result.data));
                 }
