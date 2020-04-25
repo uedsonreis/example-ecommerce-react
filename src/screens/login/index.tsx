@@ -65,7 +65,12 @@ export class LoginScreen extends Component<any, State> {
     public signup(): void {
         if (!this.validateForm()) return;
 
-        api.post('user/customer/add', this.state.customer).then((result: any) => {
+        const body = {
+            ...this.state.customer,
+            userPassword: this.state.customer.user.password
+        };
+
+        api.post('user/customer/add', body).then((result: any) => {
             if (result.ok) {
                 session.login(this.state.customer.email!, result.data);
                 this.props.navigation.navigate('salesOrder');
