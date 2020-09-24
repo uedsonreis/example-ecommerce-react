@@ -70,7 +70,7 @@ export class LoginScreen extends Component<any, State> {
             userPassword: this.state.customer.user.password
         };
 
-        api.post('user/customer/add', body).then((result: any) => {
+        api.addCustomer(body).then((result: any) => {
             if (result.ok) {
                 session.login(this.state.customer.email!, result.data);
                 this.props.navigation.navigate('salesOrder');
@@ -81,7 +81,7 @@ export class LoginScreen extends Component<any, State> {
     }
 
     public login(): void {
-        api.post('user/login', this.state.user).then((result: any) => {
+        api.login(this.state.user).then((result: any) => {
             if (result.ok) {
                 session.login(this.state.user.login!, result.data);
                 this.props.navigation.navigate('salesOrder');

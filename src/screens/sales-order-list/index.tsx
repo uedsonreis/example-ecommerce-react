@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 
-import api, { Authorization } from '../../utils/connection.api';
+import api from '../../utils/connection.api';
 import userSession from '../../storage/user.session';
 import HTTP from '../../utils/http.codes';
 
@@ -19,16 +19,14 @@ export class SalesOrderListScreen extends Component<any, State> {
 
     private updateList(): void {
         userSession.getToken().then((token: string) => {
-            api.setHeader(Authorization, "Bearer "+ token);
-
-            api.get('sales/order/list').then((result: any) => {
+            api.getSalesOrderList(token).then((result: any) => {
                 if (result.status === HTTP.BAD_REQUEST) {
                     alert("You must login as a Customer to do the purchasing!");
                     this.props.navigation.navigate('Login');
                 } else if (result.status === HTTP.FORBIDDEN) {
                     alert("Validation failure, You are not logged!");
                     this.props.navigation.navigate('Login');
-                } else if (result.status === HTTP.OK) {
+                } else if (result.status === HTTP.OK || result.status === HTTP.CREATED) {
                     this.setState({ salesOrders: result.data });
                     console.log("The sales orders are here: "+ result.data);
                 } else {

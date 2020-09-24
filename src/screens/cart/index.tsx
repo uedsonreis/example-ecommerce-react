@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 
-import api, { Authorization } from '../../utils/connection.api';
+import api from '../../utils/connection.api';
 import HTTP from '../../utils/http.codes';
 import { Item } from '../../model/item';
 import cartStorage from '../../storage/cart.storage';
@@ -47,17 +47,17 @@ export class CartScreen extends Component<any, State> {
     }
 
     public invoice(): void {
-        userSession.getToken().then((token: string) => {
-            api.setHeader(Authorization, "Bearer "+ token);
+        const items = this.state.items.map(item => ({ ...item, productId: item.product!.id }));
 
-            api.post('sales/order/invoice', this.state.items).then((result: any) => {
+        userSession.getToken().then((token: string) => {
+            api.invoice(items, token).then((result: any) => {
                 if (result.status === HTTP.BAD_REQUEST) {
                     alert("Você precisa logar como Cliente para fechar o pedido!");
                     this.props.navigation.navigate('login');
                 } else if (result.status === HTTP.FORBIDDEN) {
                     alert("Você precisa logar para fechar o pedido!");
                     this.props.navigation.navigate('login');
-                } else if (result.status === HTTP.OK) {
+                } else if (result.status === HTTP.OK || result.status === HTTP.CREATED) {
                     cartStorage.clear();
                     this.props.navigation.navigate('salesOrder');
                 } else {

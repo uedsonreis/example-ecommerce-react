@@ -6,6 +6,7 @@ export class Item {
     public id?: number;
     public price!: number;
     public amount!: number;
+    public productId!: number;
 
     public product?: Product;
     public salesOrder?: SalesOrder;

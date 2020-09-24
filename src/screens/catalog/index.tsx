@@ -17,7 +17,7 @@ export class CatalogScreen extends Component<any, State> {
     }
 
     private updateProductList(): void {
-        api.get('product/list').then((result: any) => {
+        api.getProductList().then((result: any) => {
             this.setState({ products: result.data });
             console.log("Products: ", this.state.products);
         });

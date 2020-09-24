@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { Right, Body, Text, List, ListItem, Content, Header, Left, Title } from 'native-base';
+import { View } from 'react-native';
 
 import { Product } from '../../model/product';
 import { StackHeaderProps } from '@react-navigation/stack';
